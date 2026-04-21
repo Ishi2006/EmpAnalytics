@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks | EmpAnalytics</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <img src="assets/logo.png" alt="EmpAnalytics Logo">
+                </div>
+                <span class="logo-text">Emp Analytics</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a>
+                <a href="employees.html" class="nav-link"><i class="fas fa-users"></i><span>Employees</span></a>
+                <a href="tasks.html" class="nav-link active"><i class="fas fa-check-square"></i><span>Tasks</span></a>
+                <a href="performance.html" class="nav-link"><i class="fas fa-chart-bar"></i><span>Performance</span></a>
+                <a href="attrition.html" class="nav-link"><i class="fas fa-user-minus"></i><span>Attrition</span></a>
+                <a href="index.html" class="nav-link" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; color: #ff4444;"><i class="fas fa-sign-out-alt"></i><span>Sign Out</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="user-card">
+                    <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 8px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">HA</div>
+                    <div>
+                        <p style="font-weight: 600; font-size: 0.85rem;">HR Admin</p>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">Super Admin</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <header class="topbar">
+                <div class="top-left">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fas fa-bars mobile-toggle" id="mobileToggle" style="display: none; cursor: pointer; font-size: 1.25rem;"></i>
+                        <div>
+                            <h2>Tasks</h2>
+                            <p>Track and assign workload</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-right">
+                    <div class="icon-btn"><i class="fas fa-search"></i></div>
+                    <div class="icon-btn"><i class="far fa-bell"></i><span class="badge-dot"></span></div>
+                    <div class="user-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: var(--border); overflow: hidden;">
+                        <img src="https://ui-avatars.com/api/?name=HR+Admin&background=random" alt="User">
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <!-- Summary Strip -->
+                <div class="summary-strip fade-up" style="animation-delay: 0.1s;">
+                    <div class="summary-chip">
+                        <i class="fas fa-clipboard-list" style="color: var(--primary);"></i>
+                        <div>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Total Tasks</p>
+                            <p style="font-weight: 700; font-size: 1.1rem;">134</p>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <i class="fas fa-hourglass-half" style="color: var(--warning);"></i>
+                        <div>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Pending</p>
+                            <p style="font-weight: 700; font-size: 1.1rem;">41</p>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <i class="fas fa-sync" style="color: var(--primary);"></i>
+                        <div>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">In Progress</p>
+                            <p style="font-weight: 700; font-size: 1.1rem;">58</p>
+                        </div>
+                    </div>
+                    <div class="summary-chip">
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                        <div>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Completed</p>
+                            <p style="font-weight: 700; font-size: 1.1rem;">35</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="task-toolbar fade-up" style="animation-delay: 0.2s;">
+                    <div class="toolbar-filters">
+                        <div class="filter-group">
+                            <i class="fas fa-search" style="color: var(--text-muted); font-size: 0.8rem;"></i>
+                            <input type="text" placeholder="Search tasks or assignees...">
+                        </div>
+                        <div class="filter-group">
+                            <i class="fas fa-filter" style="color: var(--text-muted); font-size: 0.8rem;"></i>
+                            <select>
+                                <option>Status: All</option>
+                                <option>Pending</option>
+                                <option>In Progress</option>
+                                <option>Completed</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <select>
+                                <option>Priority: All</option>
+                                <option>High</option>
+                                <option>Medium</option>
+                                <option>Low</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <select>
+                                <option>Department: All</option>
+                                <option>Engineering</option>
+                                <option>Product</option>
+                                <option>Sales</option>
+                                <option>HR</option>
+                                <option>Marketing</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">
+                        <i class="fas fa-plus"></i> New Task
+                    </button>
+                </div>
+
+                <!-- Kanban Board -->
+                <div class="kanban-board">
+                    <!-- Column 1: Pending -->
+                    <div class="kanban-column fade-up" style="animation-delay: 0.3s;">
+                        <div class="column-header">
+                            <h3 style="color: var(--warning);"><i class="fas fa-circle"></i> PENDING</h3>
+                            <span class="column-count">5</span>
+                        </div>
+                        <div class="task-cards staggered">
+                            <div class="task-card">
+                                <h4>Q3 Sales Report</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Consolidate all region data for quarterly review.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #E0E7FF; color: #4338CA;">SM</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">Sophia Miller</span>
+                                    </div>
+                                    <span class="priority-badge priority-medium">Medium</span>
+                                </div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">
+                                    <i class="far fa-calendar-alt"></i> Oct 15, 2026 • Sales
+                                </div>
+                            </div>
+                            <div class="task-card">
+                                <h4>UI Redesign – Login</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Implement new brand colors on login page.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #F3E8FF; color: #6B21A8;">LW</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">Liam Wilson</span>
+                                    </div>
+                                    <span class="priority-badge priority-high">High</span>
+                                </div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">
+                                    <i class="far fa-calendar-alt"></i> Oct 12, 2026 • Product
+                                </div>
+                            </div>
+                            <div class="task-card">
+                                <h4>Server Migration Plan</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Draft architecture for new AWS cluster.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #DBEAFE; color: #1E40AF;">JB</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">James Brown</span>
+                                    </div>
+                                    <span class="priority-badge priority-medium">Medium</span>
+                                </div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">
+                                    <i class="far fa-calendar-alt"></i> Oct 20, 2026 • Engineering
+                                </div>
+                            </div>
+                            <div class="task-card">
+                                <h4>Employee Survey</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Prepare questions for Q4 pulse survey.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #F1F5F9; color: var(--text-muted);">JD</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">Jane Doe</span>
+                                    </div>
+                                    <span class="priority-badge priority-low">Low</span>
+                                </div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">
+                                    <i class="far fa-calendar-alt"></i> Nov 05, 2026 • HR
+                                </div>
+                            </div>
+                            <div class="task-card">
+                                <h4>Budget Forecast</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Estimate project costs for 2027.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #FCA5A5; color: #7F1D1D;">OR</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">Oliver Rivers</span>
+                                    </div>
+                                    <span class="priority-badge priority-high">High</span>
+                                </div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">
+                                    <i class="far fa-calendar-alt"></i> Oct 25, 2026 • Finance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: In Progress -->
+                    <div class="kanban-column fade-up" style="animation-delay: 0.4s;">
+                        <div class="column-header">
+                            <h3 style="color: var(--primary);"><i class="fas fa-play-circle"></i> IN PROGRESS</h3>
+                            <span class="column-count">5</span>
+                        </div>
+                        <div class="task-cards staggered">
+                            <div class="task-card">
+                                <h4>AI Model Training</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Optimizing retrieval for analytics engine.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #E0E7FF; color: #4338CA;">AS</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">Ava Simmons</span>
+                                    </div>
+                                    <span class="priority-badge priority-high">High</span>
+                                </div>
+                                <div class="task-footer">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;">
+                                        <span>Progress</span>
+                                        <span>65%</span>
+                                    </div>
+                                    <div class="progress-container"><div class="progress-bar" style="width: 65%;"></div></div>
+                                </div>
+                            </div>
+                            <div class="task-card">
+                                <h4>HR Policy Update</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Editing handbook for remote work compliance.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #F1F5F9; color: var(--text-muted);">JD</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">Jane Doe</span>
+                                    </div>
+                                    <span class="priority-badge priority-medium">Medium</span>
+                                </div>
+                                <div class="task-footer">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;">
+                                        <span>Progress</span>
+                                        <span>40%</span>
+                                    </div>
+                                    <div class="progress-container"><div class="progress-bar" style="width: 40%;"></div></div>
+                                </div>
+                            </div>
+                            <div class="task-card">
+                                <h4>Mobile App Sprint 4</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Developing the offline sync module.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #F3E8FF; color: #6B21A8;">LW</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">Liam Wilson</span>
+                                    </div>
+                                    <span class="priority-badge priority-high">High</span>
+                                </div>
+                                <div class="task-footer">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;">
+                                        <span>Progress</span>
+                                        <span>80%</span>
+                                    </div>
+                                    <div class="progress-container"><div class="progress-bar" style="width: 80%;"></div></div>
+                                </div>
+                            </div>
+                            <div class="task-card">
+                                <h4>Client Onboarding Flow</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Refining the welcome email sequence.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #FEF3C7; color: #92400E;">ID</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">Isabella Davis</span>
+                                    </div>
+                                    <span class="priority-badge priority-low">Low</span>
+                                </div>
+                                <div class="task-footer">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;">
+                                        <span>Progress</span>
+                                        <span>25%</span>
+                                    </div>
+                                    <div class="progress-container"><div class="progress-bar" style="width: 25%;"></div></div>
+                                </div>
+                            </div>
+                            <div class="task-card">
+                                <h4>Database Optimization</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Indexing legacy tables for faster querying.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #DBEAFE; color: #1E40AF;">JB</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500;">James Brown</span>
+                                    </div>
+                                    <span class="priority-badge priority-medium">Medium</span>
+                                </div>
+                                <div class="task-footer">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;">
+                                        <span>Progress</span>
+                                        <span>50%</span>
+                                    </div>
+                                    <div class="progress-container"><div class="progress-bar" style="width: 50%;"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Completed -->
+                    <div class="kanban-column fade-up" style="animation-delay: 0.5s;">
+                        <div class="column-header">
+                            <h3 style="color: var(--success);"><i class="fas fa-check-circle"></i> COMPLETED</h3>
+                            <span class="column-count">5</span>
+                        </div>
+                        <div class="task-cards staggered">
+                            <div class="task-card" style="opacity: 0.8;">
+                                <h4 style="text-decoration: line-through; color: var(--text-muted);">Annual Performance Reviews</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">All staff reviews finalized for year-end.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #F1F5F9; color: var(--text-muted);">JD</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">Jane Doe</span>
+                                    </div>
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                </div>
+                            </div>
+                            <div class="task-card" style="opacity: 0.8;">
+                                <h4 style="text-decoration: line-through; color: var(--text-muted);">Office Relocation Plan</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Final logistics confirmed for downtown move.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #FCA5A5; color: #7F1D1D;">OR</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">Oliver Rivers</span>
+                                    </div>
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                </div>
+                            </div>
+                            <div class="task-card" style="opacity: 0.8;">
+                                <h4 style="text-decoration: line-through; color: var(--text-muted);">Marketing Campaign Q2</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Social media blitz successfully completed.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #E0E7FF; color: #4338CA;">SM</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">Sophia Miller</span>
+                                    </div>
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                </div>
+                            </div>
+                            <div class="task-card" style="opacity: 0.8;">
+                                <h4 style="text-decoration: line-through; color: var(--text-muted);">Payroll Audit</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Compliance check for all tax filings.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #FEF3C7; color: #92400E;">ID</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">Isabella Davis</span>
+                                    </div>
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                </div>
+                            </div>
+                            <div class="task-card" style="opacity: 0.8;">
+                                <h4 style="text-decoration: line-through; color: var(--text-muted);">Security Patch Rollout</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Critical vulnerability 'X' patched enterprise-wide.</p>
+                                <div class="task-meta">
+                                    <div class="assignee">
+                                        <div class="assignee-img" style="background: #DBEAFE; color: #1E40AF;">JB</div>
+                                        <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">James Brown</span>
+                                    </div>
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Backdrop -->
+    <div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 950;"></div>
+
+    <script src="js/main.js"></script>
+    <script src="js/tasks.js"></script>
+</body>
+</html>
