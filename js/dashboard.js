@@ -200,34 +200,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Animated Counters for Initial Stat Cards
-    const animateValue = (id, start, end, duration) => {
-        const obj = document.getElementById(id);
-        if (!obj) return;
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const val = progress * (end - start) + start;
-            
-            if (id === 'count-perf') {
-                obj.innerHTML = val.toFixed(1) + '%';
-            } else {
-                obj.innerHTML = Math.floor(val);
+    // Fetch All Data and Initialize
+    const initDashboard = async () => {
+        try {
+            const [empRes, taskRes, perfRes, attrRes] = await Promise.all([
+                fetch(`${API_BASE}/employees`),
+                fetch(`${API_BASE}/tasks`),
+                fetch(`${API_BASE}/performance`),
+                fetch(`${API_BASE}/attrition/high-risk`)
+            ]);
+
+            const employees = await empRes.json();
+            const tasks = await taskRes.json();
+            const performance = await perfRes.json();
+            const highRisk = await attrRes.json();
+
+            // Calculate Stats
+            const totalEmps = employees.length;
+            const totalTasks = tasks.length;
+            const avgPerf = performance.length > 0 ? (performance.reduce((acc, p) => acc + p.performance_score, 0) / performance.length) : 0;
+            const riskCount = highRisk.filter(h => h.is_high_risk).length;
+
+            // Trigger animations with real data from config.js
+            animateValue("count-employees", 0, totalEmps, 1500);
+            animateValue("count-tasks", 0, totalTasks, 1500);
+            animateValue("count-perf", 0, avgPerf, 1500);
+            animateValue("count-attr", 0, riskCount, 1500);
+
+            // Update Workload Chart with real dept data if possible
+            if (workloadChart) {
+                const deptWorkload = {};
+                employees.forEach(e => {
+                    deptWorkload[e.dept] = (deptWorkload[e.dept] || 0) + 1;
+                });
+                
+                const labels = Object.keys(deptWorkload);
+                const data = Object.values(deptWorkload).map(count => (count / totalEmps) * 100);
+                
+                workloadChart.data.labels = labels;
+                workloadChart.data.datasets[0].data = data;
+                workloadChart.update();
             }
-            
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            }
-        };
-        window.requestAnimationFrame(step);
+
+        } catch (err) {
+            console.error("Dashboard Init Error:", err);
+            showError("Failed to initialize dashboard intelligence.");
+        }
     };
 
-    // Trigger animations after a short delay
-    setTimeout(() => {
-        animateValue("count-employees", 0, 248, 1500);
-        animateValue("count-tasks", 0, 134, 1500);
-        animateValue("count-perf", 0, 76.4, 1500);
-        animateValue("count-attr", 0, 18, 1500);
-    }, 500);
+    initDashboard();
 });

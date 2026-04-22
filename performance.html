@@ -65,7 +65,7 @@
                         <div class="stat-icon" style="background: rgba(37, 99, 235, 0.1); color: var(--primary);">
                             <i class="fas fa-percentage"></i>
                         </div>
-                        <div class="stat-value">76.4%</div>
+                        <div id="stat-avg-score" class="stat-value">0%</div>
                         <div class="stat-label">Avg Score</div>
                     </div>
                     <div class="stat-card">
@@ -73,16 +73,16 @@
                         <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
                             <i class="fas fa-trophy"></i>
                         </div>
-                        <div class="stat-value" style="font-size: 1.5rem;">Priya Sharma</div>
-                        <div class="stat-label">Top Performer (91%)</div>
+                        <div id="stat-top-performer-val" class="stat-value" style="font-size: 1.5rem;">Syncing...</div>
+                        <div id="stat-top-performer-label" class="stat-label">Top Performer</div>
                     </div>
                     <div class="stat-card">
                         <div class="accent-bar" style="background: var(--danger);"></div>
                         <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">
                             <i class="fas fa-arrow-down"></i>
                         </div>
-                        <div class="stat-value" style="font-size: 1.5rem;">Karan Joshi</div>
-                        <div class="stat-label">Lowest Score (54%)</div>
+                        <div id="stat-low-performer-val" class="stat-value" style="font-size: 1.5rem;">Syncing...</div>
+                        <div id="stat-low-performer-label" class="stat-label">Lowest Score</div>
                     </div>
                 </div>
 
@@ -103,7 +103,7 @@
                         <div style="height: 300px; position: relative;">
                             <canvas id="scoreDistChart"></canvas>
                             <div style="position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
-                                <p style="font-weight: 700; font-size: 1.25rem;">248</p>
+                                <p id="dist-total-count" style="font-weight: 700; font-size: 1.25rem;">0</p>
                                 <p style="font-size: 0.75rem; color: var(--text-muted);">Employees</p>
                             </div>
                         </div>
@@ -126,131 +126,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td style="font-weight: 600;">Engineering</td>
-                                <td>81.2%</td>
-                                <td><span class="performer-badge">Arjun Mehta</span></td>
-                                <td>42</td>
-                                <td class="trend-up">↑ +4.1%</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Sales</td>
-                                <td>73.6%</td>
-                                <td><span class="performer-badge">Rohit Verma</span></td>
-                                <td>38</td>
-                                <td class="trend-down">↓ -1.2%</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">HR</td>
-                                <td>84.1%</td>
-                                <td><span class="performer-badge">Priya Sharma</span></td>
-                                <td>29</td>
-                                <td class="trend-up">↑ +2.8%</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Design</td>
-                                <td>78.9%</td>
-                                <td><span class="performer-badge">Neha Kapoor</span></td>
-                                <td>31</td>
-                                <td class="trend-up">↑ +1.5%</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Marketing</td>
-                                <td>69.3%</td>
-                                <td><span class="performer-badge">Amit Jain</span></td>
-                                <td>24</td>
-                                <td class="trend-down">↓ -0.9%</td>
-                            </tr>
+                            <!-- Dynamic Content -->
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Individual Score Cards -->
-                <div class="score-card-grid staggered">
-                    <!-- Arjun Mehta -->
-                    <div class="score-card">
-                        <div class="assignee-img" style="width: 50px; height: 50px; border-radius: 50%; background: #DBEAFE; color: #1E40AF; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">AM</div>
-                        <h4 style="font-family: 'Outfit'; margin-bottom: 4px;">Arjun Mehta</h4>
-                        <span class="performer-badge" style="background: #f1f5f9; color: var(--text-muted);">Engineering</span>
-                        <div class="score-ring-container">
-                            <svg class="score-ring-svg" width="100" height="100">
-                                <circle class="score-ring-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="score-ring-progress" cx="50" cy="50" r="45" data-score="88" style="stroke: var(--primary);"></circle>
-                            </svg>
-                            <span class="score-text">88%</span>
-                        </div>
-                        <button class="btn" style="width: 100%; border: 1px solid var(--border); background: var(--surface); color: var(--text-main); font-size: 0.85rem;">View Profile</button>
-                    </div>
-                    <!-- Priya Sharma -->
-                    <div class="score-card">
-                        <div class="assignee-img" style="width: 50px; height: 50px; border-radius: 50%; background: #D1FAE5; color: #065F46; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">PS</div>
-                        <h4 style="font-family: 'Outfit'; margin-bottom: 4px;">Priya Sharma</h4>
-                        <span class="performer-badge" style="background: #f1f5f9; color: var(--text-muted);">HR</span>
-                        <div class="score-ring-container">
-                            <svg class="score-ring-svg" width="100" height="100">
-                                <circle class="score-ring-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="score-ring-progress" cx="50" cy="50" r="45" data-score="91" style="stroke: var(--primary);"></circle>
-                            </svg>
-                            <span class="score-text">91%</span>
-                        </div>
-                        <button class="btn" style="width: 100%; border: 1px solid var(--border); background: var(--surface); color: var(--text-main); font-size: 0.85rem;">View Profile</button>
-                    </div>
-                    <!-- Rohit Verma -->
-                    <div class="score-card">
-                        <div class="assignee-img" style="width: 50px; height: 50px; border-radius: 50%; background: #FEF3C7; color: #92400E; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">RV</div>
-                        <h4 style="font-family: 'Outfit'; margin-bottom: 4px;">Rohit Verma</h4>
-                        <span class="performer-badge" style="background: #f1f5f9; color: var(--text-muted);">Sales</span>
-                        <div class="score-ring-container">
-                            <svg class="score-ring-svg" width="100" height="100">
-                                <circle class="score-ring-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="score-ring-progress" cx="50" cy="50" r="45" data-score="74" style="stroke: var(--warning);"></circle>
-                            </svg>
-                            <span class="score-text">74%</span>
-                        </div>
-                        <button class="btn" style="width: 100%; border: 1px solid var(--border); background: var(--surface); color: var(--text-main); font-size: 0.85rem;">View Profile</button>
-                    </div>
-                    <!-- Neha Kapoor -->
-                    <div class="score-card">
-                        <div class="assignee-img" style="width: 50px; height: 50px; border-radius: 50%; background: #F3E8FF; color: #6B21A8; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">NK</div>
-                        <h4 style="font-family: 'Outfit'; margin-bottom: 4px;">Neha Kapoor</h4>
-                        <span class="performer-badge" style="background: #f1f5f9; color: var(--text-muted);">Design</span>
-                        <div class="score-ring-container">
-                            <svg class="score-ring-svg" width="100" height="100">
-                                <circle class="score-ring-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="score-ring-progress" cx="50" cy="50" r="45" data-score="82" style="stroke: var(--primary);"></circle>
-                            </svg>
-                            <span class="score-text">82%</span>
-                        </div>
-                        <button class="btn" style="width: 100%; border: 1px solid var(--border); background: var(--surface); color: var(--text-main); font-size: 0.85rem;">View Profile</button>
-                    </div>
-                    <!-- Amit Jain -->
-                    <div class="score-card">
-                        <div class="assignee-img" style="width: 50px; height: 50px; border-radius: 50%; background: #FFEDD5; color: #9A3412; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">AJ</div>
-                        <h4 style="font-family: 'Outfit'; margin-bottom: 4px;">Amit Jain</h4>
-                        <span class="performer-badge" style="background: #f1f5f9; color: var(--text-muted);">Marketing</span>
-                        <div class="score-ring-container">
-                            <svg class="score-ring-svg" width="100" height="100">
-                                <circle class="score-ring-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="score-ring-progress" cx="50" cy="50" r="45" data-score="69" style="stroke: var(--warning);"></circle>
-                            </svg>
-                            <span class="score-text">69%</span>
-                        </div>
-                        <button class="btn" style="width: 100%; border: 1px solid var(--border); background: var(--surface); color: var(--text-main); font-size: 0.85rem;">View Profile</button>
-                    </div>
-                    <!-- Karan Joshi -->
-                    <div class="score-card">
-                        <div class="assignee-img" style="width: 50px; height: 50px; border-radius: 50%; background: #FEE2E2; color: #991B1B; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700;">KJ</div>
-                        <h4 style="font-family: 'Outfit'; margin-bottom: 4px;">Karan Joshi</h4>
-                        <span class="performer-badge" style="background: #f1f5f9; color: var(--text-muted);">Marketing</span>
-                        <div class="score-ring-container">
-                            <svg class="score-ring-svg" width="100" height="100">
-                                <circle class="score-ring-bg" cx="50" cy="50" r="45"></circle>
-                                <circle class="score-ring-progress" cx="50" cy="50" r="45" data-score="54" style="stroke: var(--danger);"></circle>
-                            </svg>
-                            <span class="score-text">54%</span>
-                        </div>
-                        <button class="btn" style="width: 100%; border: 1px solid var(--border); background: var(--surface); color: var(--text-main); font-size: 0.85rem;">View Profile</button>
-                    </div>
+                <div id="performance-grid" class="score-card-grid staggered">
+                    <!-- Dynamic Content -->
                 </div>
             </div>
         </main>
@@ -260,6 +143,7 @@
     <div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 950;"></div>
 
     <script src="js/main.js"></script>
+    <script src="js/config.js"></script>
     <script src="js/performance.js"></script>
 </body>
 </html>

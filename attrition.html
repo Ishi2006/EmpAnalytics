@@ -62,7 +62,7 @@
             <div class="content">
                 <!-- Risk Summary Banner -->
                 <div class="risk-banner fade-up" id="riskBanner" style="animation-delay: 0.1s;">
-                    <span><i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i> 18 employees are currently flagged as High Risk. Immediate HR intervention recommended.</span>
+                    <span id="risk-banner-text"><i class="fas fa-exclamation-triangle" style="margin-right: 10px;"></i> Calculating workforce risks...</span>
                     <i class="fas fa-times dismiss-btn" onclick="document.getElementById('riskBanner').style.display='none'"></i>
                 </div>
 
@@ -73,7 +73,7 @@
                         <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">
                             <i class="fas fa-user-times"></i>
                         </div>
-                        <div class="stat-value">18</div>
+                        <div id="stat-high-risk" class="stat-value">0</div>
                         <div class="stat-label">High Risk</div>
                     </div>
                     <div class="stat-card">
@@ -81,7 +81,7 @@
                         <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
                             <i class="fas fa-user-clock"></i>
                         </div>
-                        <div class="stat-value">47</div>
+                        <div id="stat-medium-risk" class="stat-value">0</div>
                         <div class="stat-label">Medium Risk</div>
                     </div>
                     <div class="stat-card">
@@ -89,7 +89,7 @@
                         <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
                             <i class="fas fa-user-check"></i>
                         </div>
-                        <div class="stat-value">183</div>
+                        <div id="stat-low-risk" class="stat-value">0</div>
                         <div class="stat-label">Low Risk</div>
                     </div>
                 </div>
@@ -123,187 +123,7 @@
                             </tr>
                         </thead>
                         <tbody id="riskTableBody" class="staggered">
-                            <tr class="row-high-risk">
-                                <td style="font-weight: 600;">Karan Joshi</td>
-                                <td>Engineering</td>
-                                <td>1.2 yrs</td>
-                                <td>₹7,80,000</td>
-                                <td>54%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 87%; background: var(--danger);"></div></div>
-                                        <span>87</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-high">HIGH</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--danger); color: white; border: none;">Intervene</button></td>
-                            </tr>
-                            <tr class="row-high-risk">
-                                <td style="font-weight: 600;">Sunita Rao</td>
-                                <td>Sales</td>
-                                <td>0.8 yrs</td>
-                                <td>₹6,50,000</td>
-                                <td>61%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 79%; background: var(--danger);"></div></div>
-                                        <span>79</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-high">HIGH</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--danger); color: white; border: none;">Intervene</button></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Deepak Singh</td>
-                                <td>HR</td>
-                                <td>3.1 yrs</td>
-                                <td>₹9,00,000</td>
-                                <td>72%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 58%; background: var(--warning);"></div></div>
-                                        <span>58</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-medium">MEDIUM</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--warning); color: white; border: none;">Monitor</button></td>
-                            </tr>
-                            <!-- More dummy rows -->
-                            <tr>
-                                <td style="font-weight: 600;">Amit Verma</td>
-                                <td>Marketing</td>
-                                <td>2.5 yrs</td>
-                                <td>₹8,20,000</td>
-                                <td>81%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 24%; background: var(--success);"></div></div>
-                                        <span>24</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-low">LOW</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--success); color: white; border: none;">No Action</button></td>
-                            </tr>
-                            <tr class="row-high-risk">
-                                <td style="font-weight: 600;">Pooja Hegde</td>
-                                <td>Design</td>
-                                <td>1.5 yrs</td>
-                                <td>₹7,20,000</td>
-                                <td>59%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 82%; background: var(--danger);"></div></div>
-                                        <span>82</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-high">HIGH</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--danger); color: white; border: none;">Intervene</button></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Vikram Seth</td>
-                                <td>Engineering</td>
-                                <td>4.2 yrs</td>
-                                <td>₹12,00,000</td>
-                                <td>89%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 12%; background: var(--success);"></div></div>
-                                        <span>12</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-low">LOW</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--success); color: white; border: none;">No Action</button></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Sonia Gandhi</td>
-                                <td>Sales</td>
-                                <td>2.1 yrs</td>
-                                <td>₹7,90,000</td>
-                                <td>65%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 63%; background: var(--warning);"></div></div>
-                                        <span>63</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-medium">MEDIUM</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--warning); color: white; border: none;">Monitor</button></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Rahul Dravid</td>
-                                <td>Engineering</td>
-                                <td>0.5 yrs</td>
-                                <td>₹6,80,000</td>
-                                <td>74%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 71%; background: var(--warning);"></div></div>
-                                        <span>71</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-medium">MEDIUM</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--warning); color: white; border: none;">Monitor</button></td>
-                            </tr>
-                            <tr class="row-high-risk">
-                                <td style="font-weight: 600;">Anand Kumar</td>
-                                <td>HR</td>
-                                <td>0.9 yrs</td>
-                                <td>₹6,20,000</td>
-                                <td>52%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 91%; background: var(--danger);"></div></div>
-                                        <span>91</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-high">HIGH</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--danger); color: white; border: none;">Intervene</button></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Meera Bai</td>
-                                <td>Product</td>
-                                <td>3.5 yrs</td>
-                                <td>₹11,50,000</td>
-                                <td>92%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 15%; background: var(--success);"></div></div>
-                                        <span>15</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-low">LOW</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--success); color: white; border: none;">No Action</button></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Suresh Raina</td>
-                                <td>Marketing</td>
-                                <td>1.8 yrs</td>
-                                <td>₹8,00,000</td>
-                                <td>68%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 55%; background: var(--warning);"></div></div>
-                                        <span>55</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-medium">MEDIUM</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--warning); color: white; border: none;">Monitor</button></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Rohit Sharma</td>
-                                <td>Sales</td>
-                                <td>2.4 yrs</td>
-                                <td>₹9,50,000</td>
-                                <td>78%</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div class="risk-score-bar-container"><div class="risk-score-bar" style="width: 32%; background: var(--success);"></div></div>
-                                        <span>32</span>
-                                    </div>
-                                </td>
-                                <td><span class="risk-status-badge risk-low">LOW</span></td>
-                                <td><button class="btn" style="padding: 4px 12px; font-size: 0.8rem; background: var(--success); color: white; border: none;">No Action</button></td>
-                            </tr>
+                            <!-- Dynamic Content -->
                         </tbody>
                     </table>
                 </div>
@@ -338,6 +158,7 @@
     <div id="overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 950;"></div>
 
     <script src="js/main.js"></script>
+    <script src="js/config.js"></script>
     <script src="js/attrition.js"></script>
 </body>
 </html>

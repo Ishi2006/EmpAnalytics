@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | EmpAnalytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/config.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
         :root {
             --bg: #000000;
             --surface: rgba(255, 255, 255, 0.05);
@@ -612,13 +613,40 @@
         const emailInput = document.getElementById('emailInput');
         const submitEmail = document.getElementById('submitEmail');
         const googleBtn = document.querySelector('.google-btn');
+        const verifyBtn = document.getElementById('continueToSuccess');
+        const digits = document.querySelectorAll('.digit-input');
+        const codeInputs = digits; // Alias for compatibility
         
-        const handleEmailSubmit = () => {
+        const handleEmailSubmit = async () => {
             const val = emailInput.value.trim();
             if (val.includes('@')) {
-                showStep('code');
+                try {
+                    const response = await fetch(`${API_BASE}/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: val })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Store the "token" or message if needed
+                        localStorage.setItem('userEmail', val);
+                        showStep('code');
+                    } else {
+                        throw new Error(data.error || 'Login failed');
+                    }
+                } catch (err) {
+                    showError(err.message);
+                    emailInput.style.borderColor = "#ff4444";
+                    emailInput.parentElement.style.animation = "shake 0.4s ease";
+                    setTimeout(() => {
+                        emailInput.style.borderColor = "";
+                        emailInput.parentElement.style.animation = "";
+                    }, 400);
+                }
             } else {
-                // Shake effect for invalid entry
+                showError("Please enter a valid email address.");
                 emailInput.style.borderColor = "#ff4444";
                 emailInput.parentElement.style.animation = "shake 0.4s ease";
                 setTimeout(() => {
@@ -629,15 +657,30 @@
         };
 
         submitEmail.addEventListener('click', handleEmailSubmit);
-        googleBtn.addEventListener('click', () => showStep('code')); 
+        function verifyCode() {
+            const codeArr = Array.from(digits).map(i => i.value).join('');
+            if (codeArr === "000000") {
+                finishAuth();
+            } else {
+                showError("Invalid tactical clearance code. Access Denied.");
+                digits.forEach(i => i.style.borderColor = "#ff4444");
+                setTimeout(() => digits.forEach(i => i.style.borderColor = ""), 1000);
+            }
+        }
+
+        verifyBtn.addEventListener('click', verifyCode);
+        googleBtn.addEventListener('click', () => {
+             // Mock Google login for this exercise using the admin email
+             emailInput.value = "admin@empanalytics.com";
+             handleEmailSubmit();
+        }); 
         
         emailInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleEmailSubmit();
         });
 
         // Step 2 Events: Digits
-        const digits = document.querySelectorAll('.digit-input');
-        const continueBtn = document.getElementById('continueToSuccess');
+        const continueBtn = verifyBtn;
 
         digits.forEach((input, idx) => {
             // Focus logic on click to find first empty
@@ -696,7 +739,7 @@
 
         continueBtn.addEventListener('click', () => {
             if (continueBtn.classList.contains('ready')) {
-                finishAuth();
+                verifyCode();
             } else {
                 // Shake digits if not ready
                 digits.forEach(d => {
