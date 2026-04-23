@@ -8,36 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function initAttritionIntelligence() {
         try {
-            const [empRes, perfRes] = await Promise.all([
-                fetch(`${API_BASE}/employees`),
-                fetch(`${API_BASE}/performance`)
-            ]);
-
-            if (!empRes.ok || !perfRes.ok) throw new Error('Intelligence link failure');
+            riskBannerText.innerHTML = `<i class="fas fa-microchip fa-spin"></i> Synthesizing AI Risk Models...`;
             
-            const employees = await empRes.json();
-            const performance = await perfRes.json();
+            const response = await fetch(`${API_BASE}/predict/all`);
+            if (!response.ok) throw new Error('AI Intelligence Link Offline');
+            
+            const riskData = await response.json();
 
-            // 1. Process and Categorize
-            const fullData = employees.map(emp => {
-                const perf = performance.find(p => p.employee_id === emp.employee_id);
-                const score = perf ? perf.score : 3; // Default to 3 if missing
-                
-                // MOCK TENURE: (ID based simulation)
-                const tenure = (emp.employee_id % 4) + 0.5 + (Math.random() * 0.5);
-                
-                // RISK SCORE CALCULATION:
-                // Lower performance (> risk), lower tenure (> risk), higher salary impact
-                let riskScore = (6 - score) * 15; // 1 -> 75, 5 -> 15
-                if (tenure < 1.5) riskScore += 15;
-                riskScore += Math.floor(Math.random() * 10); // Noise
-
-                let level = 'LOW';
-                if (score <= 2) level = 'HIGH';
-                else if (score === 3) level = 'MEDIUM';
-
-                return { ...emp, score, tenure: tenure.toFixed(1), riskScore, level };
-            });
+            // 1. Process for UI (Add tenure mock if needed for visual)
+            const fullData = riskData.map(item => ({
+                ...item,
+                tenure: ((item.employee_id % 5) + 1.2).toFixed(1) // Visual filler for now
+            }));
 
             // 2. Update Dashboard UI
             updateRiskMetrics(fullData);
@@ -45,12 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. Render Table
             renderRiskTable(fullData);
             
-            // 4. Render Chart (Mocked based on categories)
-            renderDriversChart();
+            // 4. Render Chart
+            renderRiskDistribution(fullData);
 
         } catch (err) {
             console.error("Attrition Init Error:", err);
-            showError(err.message);
+            showError("Intelligence systems failed. Predictive models offline.");
+            riskBannerText.innerText = "CRITICAL: Analysis Link Severed.";
         }
     }
 
@@ -86,11 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             return `
                 <tr class="${emp.level === 'HIGH' ? 'row-high-risk' : ''} fade-up" style="animation-delay: ${0.2 + (index * 0.1)}s">
-                    <td style="font-weight: 600;">${emp.employee_name}</td>
-                    <td>${emp.dept}</td>
+                    <td style="font-weight: 600;">${emp.employee_name || 'Operative ' + emp.employee_id}</td>
+                    <td>${emp.dept || 'Unassigned'}</td>
                     <td>${emp.tenure} yrs</td>
                     <td>₹${emp.salary.toLocaleString()}</td>
-                    <td>${emp.score * 20}%</td>
+                    <td>${(emp.score <= 5 ? emp.score * 20 : emp.score)}%</td>
                     <td>
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <div class="risk-score-bar-container">
@@ -110,30 +93,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     }
 
-    function renderDriversChart() {
+    function renderRiskDistribution(data) {
         const driversCtx = document.getElementById('driversChart');
         if (!driversCtx) return;
 
+        const lowCount = data.filter(e => e.level === 'LOW').length;
+        const highCount = data.filter(e => e.level === 'HIGH').length;
+        const medCount = data.filter(e => e.level === 'MEDIUM').length;
+
         new Chart(driversCtx, {
-            type: 'bar',
+            type: 'doughnut',
             data: {
-                labels: ['Work-Life Balance', 'Low Compensation', 'Limited Growth', 'Overwork', 'Manager Conflict', 'Long Commute'],
+                labels: ['Low Risk', 'Risk Alert (High)', 'Monitor (Med)'],
                 datasets: [{
-                    label: 'Severity Score',
-                    data: [82, 74, 68, 61, 55, 43],
-                    backgroundColor: '#ff6b00',
-                    borderRadius: 6,
-                    barThickness: 24
+                    data: [lowCount, highCount, medCount],
+                    backgroundColor: ['#22c55e', '#ef4444', '#f59e0b'],
+                    borderWidth: 0,
+                    hoverOffset: 15
                 }]
             },
             options: {
-                indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { beginAtZero: true, max: 100, grid: { color: '#27272a' }, ticks: { color: '#a1a1aa' } },
-                    y: { grid: { display: false }, ticks: { color: '#ffffff' } }
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#a1a1aa', usePointStyle: true } }
                 }
             }
         });

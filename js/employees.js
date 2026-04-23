@@ -103,33 +103,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Add Logic (Tactical Modal)
     if (addBtn) {
-        addBtn.addEventListener('click', () => {
-            tacticalPrompt('REGISTER NEW OPERATIVE', [
-                { key: 'name', label: 'FULL NAME', placeholder: 'e.g., John Doe' },
-                { key: 'dept', label: 'DEPARTMENT', placeholder: 'Engineering, Sales, etc.' },
-                { key: 'salary', label: 'ANNUAL PAYLOAD (INR)', type: 'number', placeholder: '800000' }
-            ], async (results) => {
-                if (!results.name || !results.dept) return showError('All fields required for registration');
+        addBtn.addEventListener('click', async () => {
+            try {
+                // Fetch valid departments to prevent invalid assignment errors
+                const deptRes = await fetch(`${API_BASE}/departments`);
+                if (!deptRes.ok) throw new Error("Could not retrieve department rosters.");
+                const departments = await deptRes.json();
 
-                try {
-                    const response = await fetch(`${API_BASE}/employees`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            employee_name: results.name,
-                            dept: results.dept,
-                            salary: parseInt(results.salary || 0)
-                        })
-                    });
+                const deptOptions = departments.map(d => ({
+                    label: d.department_name,
+                    value: d.department_name
+                }));
 
-                    if (!response.ok) throw new Error('Failed to register new operative');
-                    
-                    showSuccess('New operative registered in database.');
-                    fetchEmployees();
-                } catch (err) {
-                    showError(err.message);
-                }
-            });
+                tacticalPrompt('REGISTER NEW OPERATIVE', [
+                    { key: 'name', label: 'FULL NAME', placeholder: 'e.g., John Doe' },
+                    { 
+                        key: 'dept', 
+                        label: 'DEPARTMENT', 
+                        type: 'select', 
+                        options: deptOptions 
+                    },
+                    { key: 'salary', label: 'ANNUAL PAYLOAD (INR)', type: 'number', placeholder: '800000' }
+                ], async (results) => {
+                    if (!results.name || !results.dept) return showError('All fields required for registration');
+
+                    try {
+                        const response = await fetch(`${API_BASE}/employees`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                employee_name: results.name,
+                                dept: results.dept,
+                                salary: parseInt(results.salary || 0)
+                            })
+                        });
+
+                        if (!response.ok) {
+                            const error = await response.json();
+                            throw new Error(error.error || 'Failed to register new operative');
+                        }
+                        
+                        showSuccess('New operative registered in database.');
+                        fetchEmployees();
+                    } catch (err) {
+                        showError(err.message);
+                    }
+                });
+            } catch (err) {
+                showError(err.message);
+            }
         });
     }
 

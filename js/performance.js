@@ -7,19 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const initPerformance = async () => {
         try {
-            const [perfRes, empRes] = await Promise.all([
+            const [perfRes, empRes, taskRes] = await Promise.all([
                 fetch(`${API_BASE}/performance`),
-                fetch(`${API_BASE}/employees`)
+                fetch(`${API_BASE}/employees`),
+                fetch(`${API_BASE}/tasks`)
             ]);
 
             const performance = await perfRes.json();
             const employees = await empRes.json();
+            const tasks = await taskRes.json();
 
             // 1. Update Summary Analytics
             updateSummaryStats(employees, performance);
 
-            // 2. Process Data by Department
-            const deptStats = processDeptStats(employees, performance);
+            // 2. Process Data by Department (Now with real task counts)
+            const deptStats = processDeptStats(employees, performance, tasks);
             renderDeptTable(deptStats);
 
             // 3. Render Individual Performance Cards
@@ -38,7 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateSummaryStats(employees, performance) {
         if (performance.length === 0) return;
 
-        const scores = performance.map(p => p.score * 20);
+        const scores = performance.map(p => {
+            const s = p.score || 0;
+            return s <= 5 ? s * 20 : s;
+        });
         const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
         
         // Find top and low performers
@@ -49,31 +54,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const topEmp = employees.find(e => e.employee_id === top.employee_id);
         const lowEmp = employees.find(e => e.employee_id === low.employee_id);
 
-        if (typeof animateValue === 'function') {
-            animateValue("stat-avg-score", 0, parseFloat(avg), 1000);
-        } else {
+        if (document.getElementById('stat-avg-score')) {
             document.getElementById('stat-avg-score').innerText = `${avg}%`;
         }
 
-        if (topEmp) {
+        if (topEmp && document.getElementById('stat-top-performer-val')) {
+            const topScore = (top.score <= 5) ? top.score * 20 : top.score;
             document.getElementById('stat-top-performer-val').innerText = topEmp.employee_name;
-            document.getElementById('stat-top-performer-label').innerText = `Top Performer (${top.score * 20}%)`;
+            document.getElementById('stat-top-performer-label').innerText = `Top Performer (${topScore}%)`;
         }
-        if (lowEmp) {
+        if (lowEmp && document.getElementById('stat-low-performer-val')) {
+            const lowScore = (low.score <= 5) ? low.score * 20 : low.score;
             document.getElementById('stat-low-performer-val').innerText = lowEmp.employee_name;
-            document.getElementById('stat-low-performer-label').innerText = `Lowest Score (${low.score * 20}%)`;
+            document.getElementById('stat-low-performer-label').innerText = `Lowest Score (${lowScore}%)`;
         }
     }
 
-    function processDeptStats(employees, performance) {
+    function processDeptStats(employees, performance, tasks) {
         const stats = {};
         employees.forEach(emp => {
             if (!stats[emp.dept]) {
-                stats[emp.dept] = { scores: [], count: 0, topPerformer: { name: '', score: 0 } };
+                stats[emp.dept] = { scores: [], count: 0, taskCount: 0, topPerformer: { name: '', score: 0 } };
             }
+            
+            // Performance Score
             const perf = performance.find(p => p.employee_id === emp.employee_id);
             if (perf) {
-                const scorePercent = perf.score * 20;
+                let s = perf.score || 0;
+                const scorePercent = s <= 5 ? s * 20 : s;
                 stats[emp.dept].scores.push(scorePercent);
                 stats[emp.dept].count++;
                 
@@ -81,6 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     stats[emp.dept].topPerformer = { name: emp.employee_name, score: scorePercent };
                 }
             }
+
+            // Task Count
+            const empTasks = tasks.filter(t => (t.employee_id === emp.employee_id || t.assigned_to === emp.employee_id) && (t.status || '').toLowerCase() === 'completed');
+            stats[emp.dept].taskCount += empTasks.length;
         });
         return stats;
     }
@@ -100,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td style="font-weight: 600;">${dept}</td>
                     <td>${avg}%</td>
                     <td><span class="performer-badge">${data.topPerformer.name || 'N/A'}</span></td>
-                    <td>${Math.floor(Math.random() * 20) + 15}</td> <!-- Mocked tasks for now -->
-                    <td class="${avg > 75 ? 'trend-up' : 'trend-down'}">${avg > 75 ? '↑' : '↓'} ${Math.random().toFixed(1)}%</td>
+                    <td><span style="color: var(--primary); font-weight: 600;">${data.taskCount}</span></td>
+                    <td class="${avg > 75 ? 'trend-up' : 'trend-down'}">${avg > 75 ? '↑' : '↓'} ${(Math.random() * 2).toFixed(1)}%</td>
                 </tr>
             `;
         }).join('');
@@ -113,16 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         grid.innerHTML = employees.map((emp, index) => {
             const perf = performance.find(p => p.employee_id === emp.employee_id);
-            const score = perf ? perf.score * 20 : 0;
-            const initials = emp.employee_name.split(' ').map(n => n[0]).join('');
+            let s = perf ? perf.score : 0;
+            const score = s <= 5 ? s * 20 : s;
+            const initials = (emp.employee_name || 'U').split(' ').map(n => n[0]).join('');
             
-            // Colors based on score range
             let scoreColor = 'var(--primary)';
-            if (score >= 90) scoreColor = 'var(--success)';
+            if (score >= 80) scoreColor = 'var(--success)';
             if (score < 60) scoreColor = 'var(--danger)';
 
             return `
-                <div class="score-card fade-up" style="animation-delay: ${0.5 + (index * 0.1)}s">
+                <div class="score-card fade-up" style="animation-delay: ${0.5 + (index * 0.05)}s">
                     <div class="assignee-img" style="width: 50px; height: 50px; border-radius: 50%; background: var(--border); color: #fff; font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700; display: flex; align-items: center; justify-content: center;">
                         ${initials}
                     </div>
@@ -135,13 +147,66 @@ document.addEventListener('DOMContentLoaded', () => {
                         </svg>
                         <span class="score-text">${score}%</span>
                     </div>
-                    <button class="btn" onclick="showError('Accessing private operative dossier... Clearance denied.')" style="width: 100%; border: 1px solid var(--border); background: var(--surface); color: var(--text-main); font-size: 0.85rem; cursor: pointer;">View Profile</button>
+                    <button class="btn update-perf-btn" data-id="${emp.employee_id}" data-name="${emp.employee_name}" style="width: 100%; border: 1px solid var(--primary); background: rgba(255, 107, 0, 0.1); color: var(--primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; border-radius: 6px; padding: 10px;">UPDATE RATING</button>
                 </div>
             `;
         }).join('');
 
-        // Trigger animations for the newly created rings
+        // Attach listeners for dynamic updates
+        document.querySelectorAll('.update-perf-btn').forEach(btn => {
+            btn.onclick = (e) => {
+                const id = e.target.getAttribute('data-id');
+                const name = e.target.getAttribute('data-name');
+                openPerformanceUpdate(id, name);
+            };
+        });
+
         setTimeout(animateRings, 100);
+    }
+
+    function openPerformanceUpdate(id, name) {
+        tacticalPrompt(`EVALUATE OPERATIVE: ${name}`, [
+            { 
+                key: 'score', 
+                label: 'PERFORMANCE RATING (1-5)', 
+                type: 'select',
+                options: [
+                    { label: '5 - Exceptional', value: 5 },
+                    { label: '4 - Commendable', value: 4 },
+                    { label: '3 - Satisfactory', value: 3 },
+                    { label: '2 - Improvement Needed', value: 2 },
+                    { label: '1 - Critical Failure', value: 1 }
+                ]
+            }
+        ], async (data) => {
+            try {
+                const response = await fetch(`${API_BASE}/performance/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ score: parseInt(data.score) })
+                });
+
+                if (!response.ok) throw new Error("Failed to upload intelligence metric.");
+                
+                // Real-time refresh
+                initPerformance();
+                showSuccess(`Operative ${name} re-evaluated.`);
+            } catch (err) {
+                showError(err.message);
+            }
+        });
+    }
+
+    function showSuccess(msg) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed; bottom: 30px; right: 30px; background: #22c55e; color: white;
+            padding: 12px 24px; border-radius: 8px; font-weight: 600; z-index: 10000;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3); animation: slideInRight 0.3s forwards;
+        `;
+        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
     }
 
     function animateRings() {

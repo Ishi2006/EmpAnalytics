@@ -4,6 +4,14 @@ from mysql.connector import Error
 
 employee_bp = Blueprint('employee', __name__)
 
+@employee_bp.route('/departments', methods=['GET'])
+def get_departments():
+    """Fetch all valid departments for the operative registry."""
+    results = execute_query("SELECT * FROM Department")
+    if results is None:
+        return jsonify({"error": "Failed to fetch department rosters"}), 500
+    return jsonify(results), 200
+
 @employee_bp.route('/employees', methods=['GET'])
 def get_employees():
     """Fetch all employees using Department JOIN as requested."""

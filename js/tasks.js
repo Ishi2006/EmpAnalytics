@@ -106,10 +106,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. New Task Mock
     if (addTaskBtn) {
-        addTaskBtn.addEventListener('click', () => {
-            showError("Task deployment requires Commander clearance. Manual override disabled for this session.");
+        addTaskBtn.addEventListener('click', async () => {
+            try {
+                // Fetch valid operatives to prevent foreign key violations
+                const empRes = await fetch(`${API_BASE}/employees`);
+                if (!empRes.ok) throw new Error("Could not retrieve operative dossiers.");
+                const employees = await empRes.json();
+
+                const operativeOptions = employees.map(e => ({
+                    label: `${e.employee_name} (ID: ${e.employee_id})`,
+                    value: e.employee_id
+                }));
+
+                tacticalPrompt("DEPLOY NEW TASK", [
+                    { 
+                        label: "Assigned Operative", 
+                        key: "employee_id", 
+                        type: "select", 
+                        options: operativeOptions 
+                    },
+                    { label: "Task Objective", key: "task_name", type: "text", placeholder: "e.g. System Audit" },
+                    { 
+                        label: "Initial Status", 
+                        key: "status", 
+                        type: "select", 
+                        options: [
+                            { label: "Pending", value: "pending" },
+                            { label: "In Progress", value: "in_progress" },
+                            { label: "Completed", value: "completed" }
+                        ]
+                    }
+                ], async (data) => {
+                    try {
+                        const response = await fetch(`${API_BASE}/tasks`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                employee_id: parseInt(data.employee_id),
+                                task_name: data.task_name,
+                                status: data.status
+                            })
+                        });
+
+                        if (!response.ok) {
+                            const error = await response.json();
+                            throw new Error(error.error || 'Deployment failed');
+                        }
+
+                        fetchTasks();
+                    } catch (err) {
+                        showError(err.message);
+                    }
+                });
+            } catch (err) {
+                showError(err.message);
+            }
         });
     }
 

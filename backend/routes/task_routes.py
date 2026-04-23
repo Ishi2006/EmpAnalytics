@@ -27,6 +27,8 @@ def add_task():
         conn.commit()
         return jsonify({"task_id": cursor.lastrowid, "message": "Task assigned"}), 201
     except Error as e:
+        if e.errno == 1452:
+            return jsonify({"error": "Deployment Failed: Target Operative does not exist in central database."}), 400
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()

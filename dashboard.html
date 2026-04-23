@@ -171,117 +171,18 @@
                             <h3>Recent Activity</h3>
                             <i class="fas fa-ellipsis-h" style="color: var(--text-muted); cursor: pointer;"></i>
                         </div>
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <div>
-                                    <p style="font-size: 0.9rem; font-weight: 500;">New employee: <strong>Sarah Connor</strong> joined Engineering</p>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted);">2 hours ago</p>
-                                </div>
-                            </div>
-                            <div class="activity-item" style="border-color: var(--success);">
-                                <div>
-                                    <p style="font-size: 0.9rem; font-weight: 500;">Task: <strong>Cloud Migration</strong> completed by Team Blue</p>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted);">5 hours ago</p>
-                                </div>
-                            </div>
-                            <div class="activity-item" style="border-color: var(--danger);">
-                                <div>
-                                    <p style="font-size: 0.9rem; font-weight: 500;">Risk Alert: High attrition risk detected for <strong>Alex Rivers</strong></p>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted);">Yesterday</p>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div>
-                                    <p style="font-size: 0.9rem; font-weight: 500;">Review: Q1 Performance review for <strong>Marketing</strong> finalised</p>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted);">2 days ago</p>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div>
-                                    <p style="font-size: 0.9rem; font-weight: 500;">Training: AI Ethics workshop completed by 45 staff</p>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted);">3 days ago</p>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div>
-                                    <p style="font-size: 0.9rem; font-weight: 500;">System Update: Analytics engine updated to v2.4</p>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted);">1 week ago</p>
-                                </div>
-                            </div>
+                        <div class="activity-list" id="activity-f-list">
+                            <!-- Dynamic Content -->
                         </div>
                     </div>
 
                     <div class="card fade-up" style="animation-delay: 0.8s;">
                         <div class="card-header">
                             <h3>Top Performers</h3>
-                            <button style="border: none; background: transparent; color: var(--primary); font-weight: 600; cursor: pointer; font-size: 0.85rem;">View All</button>
+                            <a href="performance.html" style="text-decoration: none; color: var(--primary); font-weight: 600; cursor: pointer; font-size: 0.85rem;">View All</a>
                         </div>
-                        <div class="performers-list" style="display: flex; flex-direction: column; gap: 16px;">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 40px; height: 40px; border-radius: 12px; background: #E0E7FF; color: #4338CA; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">AS</div>
-                                <div style="flex: 1;">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                        <p style="font-size: 0.9rem; font-weight: 600;">Ava Simmons</p>
-                                        <p style="font-size: 0.9rem; font-weight: 700; color: var(--success);">98.2%</p>
-                                    </div>
-                                    <div style="height: 6px; background: var(--bg); border-radius: 3px; position: relative; overflow: hidden;">
-                                        <div style="position: absolute; left: 0; top: 0; height: 100%; width: 98%; background: var(--success);"></div>
-                                    </div>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Engineering • Senior Dev</p>
-                                </div>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 40px; height: 40px; border-radius: 12px; background: #FEF3C7; color: #92400E; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">ID</div>
-                                <div style="flex: 1;">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                        <p style="font-size: 0.9rem; font-weight: 600;">Isabella Davis</p>
-                                        <p style="font-size: 0.9rem; font-weight: 700; color: var(--primary);">95.5%</p>
-                                    </div>
-                                    <div style="height: 6px; background: var(--bg); border-radius: 3px; position: relative; overflow: hidden;">
-                                        <div style="position: absolute; left: 0; top: 0; height: 100%; width: 95%; background: var(--primary);"></div>
-                                    </div>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Product • PM</p>
-                                </div>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 40px; height: 40px; border-radius: 12px; background: #DBEAFE; color: #1E40AF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">JB</div>
-                                <div style="flex: 1;">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                        <p style="font-size: 0.9rem; font-weight: 600;">James Brown</p>
-                                        <p style="font-size: 0.9rem; font-weight: 700; color: var(--primary);">92.8%</p>
-                                    </div>
-                                    <div style="height: 6px; background: var(--bg); border-radius: 3px; position: relative; overflow: hidden;">
-                                        <div style="position: absolute; left: 0; top: 0; height: 100%; width: 92%; background: var(--primary);"></div>
-                                    </div>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Engineering • Backend</p>
-                                </div>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 40px; height: 40px; border-radius: 12px; background: #D1FAE5; color: #065F46; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">LW</div>
-                                <div style="flex: 1;">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                        <p style="font-size: 0.9rem; font-weight: 600;">Liam Wilson</p>
-                                        <p style="font-size: 0.9rem; font-weight: 700; color: var(--accent);">89.4%</p>
-                                    </div>
-                                    <div style="height: 6px; background: var(--bg); border-radius: 3px; position: relative; overflow: hidden;">
-                                        <div style="position: absolute; left: 0; top: 0; height: 100%; width: 89%; background: var(--accent);"></div>
-                                    </div>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Product • UI/UX Designer</p>
-                                </div>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 40px; height: 40px; border-radius: 12px; background: #F3E8FF; color: #6B21A8; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">SM</div>
-                                <div style="flex: 1;">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                        <p style="font-size: 0.9rem; font-weight: 600;">Sophia Miller</p>
-                                        <p style="font-size: 0.9rem; font-weight: 700; color: var(--accent);">88.1%</p>
-                                    </div>
-                                    <div style="height: 6px; background: var(--bg); border-radius: 3px; position: relative; overflow: hidden;">
-                                        <div style="position: absolute; left: 0; top: 0; height: 100%; width: 88%; background: var(--accent);"></div>
-                                    </div>
-                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Marketing • Lead</p>
-                                </div>
-                            </div>
+                        <div class="performers-list" id="top-performer-render-list" style="display: flex; flex-direction: column; gap: 16px;">
+                            <!-- Dynamic Content -->
                         </div>
                     </div>
                 </div>

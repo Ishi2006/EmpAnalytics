@@ -79,12 +79,25 @@ function tacticalPrompt(title, fields, callback) {
     const modal = document.createElement('div');
     modal.style.cssText = `background: #121214; border: 1px solid var(--primary); padding: 30px; border-radius: 12px; width: 400px; border-left: 5px solid var(--primary);`;
     
-    let fieldsHtml = fields.map(f => `
-        <div style="margin-bottom: 15px; text-align: left;">
-            <label style="color: #a1a1aa; font-size: 0.8rem; display: block; margin-bottom: 5px;">${f.label}</label>
-            <input id="prompt_${f.key}" type="${f.type || 'text'}" placeholder="${f.placeholder || ''}" style="width: 100%; padding: 10px; background: #18181b; border: 1px solid #27272a; border-radius: 6px; color: white; font-family: 'Outfit';">
-        </div>
-    `).join('');
+    let fieldsHtml = fields.map(f => {
+        if (f.type === 'select') {
+            const options = f.options.map(opt => `<option value="${opt.value}">${opt.label}</option>`).join('');
+            return `
+                <div style="margin-bottom: 15px; text-align: left;">
+                    <label style="color: #a1a1aa; font-size: 0.8rem; display: block; margin-bottom: 5px;">${f.label}</label>
+                    <select id="prompt_${f.key}" style="width: 100%; padding: 10px; background: #18181b; border: 1px solid #27272a; border-radius: 6px; color: white; font-family: 'Outfit';">
+                        ${options}
+                    </select>
+                </div>
+            `;
+        }
+        return `
+            <div style="margin-bottom: 15px; text-align: left;">
+                <label style="color: #a1a1aa; font-size: 0.8rem; display: block; margin-bottom: 5px;">${f.label}</label>
+                <input id="prompt_${f.key}" type="${f.type || 'text'}" placeholder="${f.placeholder || ''}" style="width: 100%; padding: 10px; background: #18181b; border: 1px solid #27272a; border-radius: 6px; color: white; font-family: 'Outfit';">
+            </div>
+        `;
+    }).join('');
 
     modal.innerHTML = `
         <h3 style="color: var(--primary); margin-bottom: 20px; font-family: 'Playfair Display'; text-align: center;">${title}</h3>
